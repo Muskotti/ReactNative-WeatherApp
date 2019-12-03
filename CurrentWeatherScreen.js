@@ -85,11 +85,11 @@ export default class CurrentWeatherScreen extends Component {
       case '13n':
         return 'weather-snowy';
       case '50d':
-        return 'weather-sunny';
+        return 'weather-fog';
       case '50n':
         return 'weather-fog';
       default :
-        return 'weather-fog';
+        return 'weather-sunny';
     }
   }
 
