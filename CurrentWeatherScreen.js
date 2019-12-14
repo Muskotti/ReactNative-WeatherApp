@@ -3,51 +3,41 @@ import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator} from 'reac
 import SearchBarTop from './SearchBarTop.js';
 import CurrentInfo from './CurrentInfo.js';
 import { Icon } from 'react-native-elements';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-import iconMaker from "./iconMaker.js";
+import fetchData from "./fetchData.js"
+
+const data = new fetchData();
 
 export default class CurrentWeatherScreen extends Component {
 
   state = {
-    location: null,
     isLoading: true,
-    city: '',
-    tempeture: '',
-    icon: '',
-  };
-
-  componentDidMount(){
-    this.getLocation();
+    city: null,
+    tempeture: null,
+    icon: null,
   }
 
-  async getLocation() {
+  setCurrentWeather() {
+    this.setState({
+      isLoading: data.currentWeather.isLoading,
+      city: data.currentWeather.city,
+      tempeture: data.currentWeather.tempeture,
+      icon: data.currentWeather.icon
+    })
+  }
+
+  async componentDidMount(){
+    await data.setLocation().then(()=> {
+      this.setCurrentWeather()
+    });
+  }
+
+  getLocation = () => {
     this.setState({
       isLoading: true,
+    })
+    data.setLocation().then(()=> {
+      this.setCurrentWeather()
     });
-    await Permissions.askAsync(Permissions.LOCATION);
-    let location = await Location.getCurrentPositionAsync({});
-    this.setState({ location }, () => {
-      this.getWeather(location.coords.latitude, location.coords.longitude)
-    });
-  }
-
-  async getWeather(latitude, longitude) {
-    try {
-      let response = await fetch(
-        'https://api.openweathermap.org/data/2.5/weather?lat='+ latitude + '&lon=' + longitude + '&units=metric&APPID=63dba0881a9c7a2ab8dd3666fe61c42c&',
-      );
-      await response.json().then((result)=> {
-        this.setState({
-          isLoading: false,
-          city: result.name,
-          tempeture: result.main.temp + ' C',
-          icon: iconMaker.getIcon(result.weather[0].icon),
-        });
-      });
-    } catch (error) {
-      console.error(error);
-    }
   }
 
   render() {
@@ -71,7 +61,7 @@ export default class CurrentWeatherScreen extends Component {
               name='crosshairs-gps'
               type='material-community'
               color='tomato'
-              onPress={() => this.getLocation()} 
+              onPress={() => {this.getLocation()}} 
             />
           </View>
           <View style={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
