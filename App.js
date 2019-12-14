@@ -16,7 +16,9 @@ const MainNavigator = createBottomTabNavigator (
     },
     PredictionScreen: {
       screen: PredictionScreen,
-      navigationOptions: { title: 'Prediction' }
+      navigationOptions: { 
+        title: 'Prediction',
+      }
     },
   },
   {
@@ -31,9 +33,7 @@ const MainNavigator = createBottomTabNavigator (
         } else if (routeName === 'PredictionScreen') {
           iconName = `alarm`;
         }
-
-        // You can return any component that you like here!
-        return <IconComponent name={iconName} size={25} color={tintColor} />;
+        return <IconComponent name={iconName} size={25} color={tintColor}/>;
       },
     }),
     tabBarOptions: {
