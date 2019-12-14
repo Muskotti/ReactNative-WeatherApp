@@ -14,6 +14,7 @@ export default class fetchData {
       tempeture: null,
       icon: null,
     }
+    this.forecast = null
   }
 
   getIcon(iconID) {
@@ -65,7 +66,6 @@ export default class fetchData {
     let location = await Location.getCurrentPositionAsync({});
     this.location.latitude = location.coords.latitude;
     this.location.longitude = location.coords.longitude;
-    await this.getCurrentWeather()
   }
 
   async getCurrentWeather() {
@@ -77,6 +77,19 @@ export default class fetchData {
         this.currentWeather.isLoading = false
         this.currentWeather.tempeture = data.main.temp + " C"
         this.currentWeather.icon = this.getIcon(data.weather[0].icon)
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getForecast() {
+    try {
+      return await fetch('https://api.openweathermap.org/data/2.5/forecast?lat='+ this.location.latitude + '&lon=' + this.location.longitude + '&units=metric&APPID=63dba0881a9c7a2ab8dd3666fe61c42c&')
+      .then((responce) => responce.json())
+      .then((data) => {
+        console.log(data)
+        this.forecast = data.list
       });
     } catch (error) {
       console.error(error);

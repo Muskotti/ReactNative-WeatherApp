@@ -16,6 +16,13 @@ export default class CurrentWeatherScreen extends Component {
     icon: null,
   }
 
+  async componentDidMount(){
+    await data.setLocation();
+    await data.getCurrentWeather().then(()=> {
+      this.setCurrentWeather()
+    });
+  }
+
   setCurrentWeather() {
     this.setState({
       isLoading: data.currentWeather.isLoading,
@@ -23,12 +30,6 @@ export default class CurrentWeatherScreen extends Component {
       tempeture: data.currentWeather.tempeture,
       icon: data.currentWeather.icon
     })
-  }
-
-  async componentDidMount(){
-    await data.setLocation().then(()=> {
-      this.setCurrentWeather()
-    });
   }
 
   getLocation = () => {
