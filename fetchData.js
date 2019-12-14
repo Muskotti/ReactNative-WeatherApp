@@ -88,7 +88,6 @@ export default class fetchData {
       return await fetch('https://api.openweathermap.org/data/2.5/forecast?lat='+ this.location.latitude + '&lon=' + this.location.longitude + '&units=metric&APPID=63dba0881a9c7a2ab8dd3666fe61c42c&')
       .then((responce) => responce.json())
       .then((data) => {
-        console.log(data)
         this.forecast = data.list
       });
     } catch (error) {

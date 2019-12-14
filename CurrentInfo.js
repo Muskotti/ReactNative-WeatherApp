@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Icon, Text } from 'react-native-elements';
 import PcD from './assets/weather-partly-cloudy.svg';
 import PcN from "./assets/weather-night-partly-cloudy.svg";

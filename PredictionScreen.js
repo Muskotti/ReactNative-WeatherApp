@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator, Text} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import fetchData from "./fetchData.js"
+import PredictionItem from "./PredictionItem.js";
 
 const data = new fetchData();
 
@@ -36,7 +37,14 @@ export default class PredictionScreen extends Component {
       <SafeAreaView  style={styles.droidSafeArea}>
           <FlatList
             data={this.state.list}
-          renderItem={({item}) => <Text style={styles.item}>{item.main.temp}</Text>}
+            renderItem={({item}) => <PredictionItem 
+                                      date={item.dt_txt} 
+                                      temp={item.main.temp} 
+                                      descr={item.weather[0].description} 
+                                      icon={data.getIcon(item.weather[0].icon)} 
+                                      humid={item.main.humidity}
+                                      />}
+            keyExtractor={(item, index) => 'key'+index}
           />
       </SafeAreaView >
     );
@@ -47,10 +55,5 @@ const styles = StyleSheet.create({
   droidSafeArea: {
     flex: 1,
     paddingTop: Platform.OS === 'android' ? 30 : 0
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
+  }
 });
