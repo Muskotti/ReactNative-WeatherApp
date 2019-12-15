@@ -17,7 +17,7 @@ const MainNavigator = createBottomTabNavigator (
     PredictionScreen: {
       screen: PredictionScreen,
       navigationOptions: { 
-        title: 'Prediction',
+        title: 'Forecast',
       }
     },
   },

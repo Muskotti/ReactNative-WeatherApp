@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator,} from 'react-native';
+import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator} from 'react-native';
 import SearchBarTop from './SearchBarTop.js';
 import CurrentInfo from './CurrentInfo.js';
 import { Icon } from 'react-native-elements';

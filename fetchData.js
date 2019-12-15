@@ -71,7 +71,7 @@ export default class fetchData {
   async compareTime() {
     let oldTime = new Date( await AsyncStorage.getItem('Time'))
     let newTime = new Date()
-    oldTime.setMinutes( oldTime.getMinutes() + 4 );
+    oldTime.setMinutes( oldTime.getMinutes() + 5 );
     if(Date.parse(newTime) > Date.parse(oldTime)) {
       return true
     }
