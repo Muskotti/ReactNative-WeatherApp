@@ -14,7 +14,7 @@ export default class PredictionScreen extends Component {
   };
 
   async componentDidMount(){
-    if(await data.compareTime()) {
+    if(await data.compareTime() || await data.cheackKey('forecast')) {
       await data.getLocation();
       await data.getForecast().then(()=> {
         this.setState({
