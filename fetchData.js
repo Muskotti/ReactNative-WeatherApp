@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import { AsyncStorage } from 'react-native';
 
 export default class fetchData {
 
@@ -60,23 +61,71 @@ export default class fetchData {
     }
   }
 
-  async setLocation() {
+  async cheackKey(key) {
+    if(await AsyncStorage.getItem(key)) {
+      return false
+    }
+    return true
+  }
+
+  async compareTime() {
+    let oldTime = new Date( await AsyncStorage.getItem('Time'))
+    let newTime = new Date()
+    oldTime.setMinutes( oldTime.getMinutes() + 4 );
+    if(Date.parse(newTime) > Date.parse(oldTime)) {
+      return true
+    }
+    return false
+  }
+
+  async getStorageCurrent() {
+    this.location.latitude = await AsyncStorage.getItem('Lat');
+    this.location.longitude = await AsyncStorage.getItem('Lon');
+
+    let data = JSON.parse(await AsyncStorage.getItem('current'))
+    this.currentWeather.city = data.name
+    this.currentWeather.isLoading = false
+    this.currentWeather.tempeture = data.main.temp
+    this.currentWeather.icon = this.getIcon(data.weather[0].icon)
+    this.currentWeather.isLoading = false
+  }
+
+  async getStorageForecast() {
+    let data = JSON.parse(await AsyncStorage.getItem('forecast'))
+    this.forecast = data
+  }
+
+  async getLocation() {
     this.currentWeather.isLoading = false
     await Permissions.askAsync(Permissions.LOCATION);
     let location = await Location.getCurrentPositionAsync({});
     this.location.latitude = location.coords.latitude;
     this.location.longitude = location.coords.longitude;
+    await AsyncStorage.multiSet([['Lat', '' + location.coords.latitude], ['Lon', '' + location.coords.longitude], ['Time', '' + new Date()]], (error) => {
+      if(error) {
+        console.log(error)
+      }
+    })
+  }
+
+  async saveData(func,data) {
+    try {
+      await AsyncStorage.setItem(func, JSON.stringify(data))
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async getCurrentWeather() {
     try {
-       return fetch('https://api.openweathermap.org/data/2.5/weather?lat='+ this.location.latitude + '&lon=' + this.location.longitude + '&units=metric&APPID=63dba0881a9c7a2ab8dd3666fe61c42c&')
+      return fetch('https://api.openweathermap.org/data/2.5/weather?lat='+ this.location.latitude + '&lon=' + this.location.longitude + '&units=metric&APPID=63dba0881a9c7a2ab8dd3666fe61c42c&')
       .then((responce) => responce.json())
       .then((data) => {
         this.currentWeather.city = data.name
         this.currentWeather.isLoading = false
         this.currentWeather.tempeture = data.main.temp + " C"
         this.currentWeather.icon = this.getIcon(data.weather[0].icon)
+        this.saveData('current',data)
       });
     } catch (error) {
       console.error(error);
@@ -89,6 +138,7 @@ export default class fetchData {
       .then((responce) => responce.json())
       .then((data) => {
         this.forecast = data.list
+        this.saveData('forecast', data.list)
       });
     } catch (error) {
       console.error(error);

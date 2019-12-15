@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator, Text} from 'react-native';
+import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import fetchData from "./fetchData.js"
 import PredictionItem from "./PredictionItem.js";
@@ -14,13 +14,22 @@ export default class PredictionScreen extends Component {
   };
 
   async componentDidMount(){
-    await data.setLocation();
-    await data.getForecast().then(()=> {
-      this.setState({
-        isLoading: false,
-        list: data.forecast
+    if(await data.compareTime()) {
+      await data.getLocation();
+      await data.getForecast().then(()=> {
+        this.setState({
+          isLoading: false,
+          list: data.forecast
+        })
+      });
+    } else {
+      await data.getStorageForecast().then(()=> {
+        this.setState({
+          isLoading: false,
+          list: data.forecast
+        })
       })
-    });
+    }
   }
 
   render() {

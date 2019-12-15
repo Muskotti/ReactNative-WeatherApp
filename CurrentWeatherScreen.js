@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator} from 'react-native';
+import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator,} from 'react-native';
 import SearchBarTop from './SearchBarTop.js';
 import CurrentInfo from './CurrentInfo.js';
 import { Icon } from 'react-native-elements';
@@ -17,10 +17,16 @@ export default class CurrentWeatherScreen extends Component {
   }
 
   async componentDidMount(){
-    await data.setLocation();
-    await data.getCurrentWeather().then(()=> {
-      this.setCurrentWeather()
-    });
+    if(await data.compareTime() || await data.cheackKey('current')) {
+      await data.getLocation();
+      await data.getCurrentWeather().then(()=> {
+        this.setCurrentWeather()
+      });
+    } else {
+      data.getStorageCurrent().then(()=> {
+        this.setCurrentWeather()
+      })
+    }
   }
 
   setCurrentWeather() {
@@ -32,13 +38,15 @@ export default class CurrentWeatherScreen extends Component {
     })
   }
 
-  getLocation = () => {
-    this.setState({
-      isLoading: true,
-    })
-    data.setLocation().then(()=> {
-      this.setCurrentWeather()
-    });
+  async getLocation(){
+    if(await data.compareTime()) {
+      this.setState({
+        isLoading: true,
+      })
+      data.getLocation().then(()=> {
+        this.setCurrentWeather()
+      });
+    }
   }
 
   render() {
@@ -62,7 +70,7 @@ export default class CurrentWeatherScreen extends Component {
               name='crosshairs-gps'
               type='material-community'
               color='tomato'
-              onPress={() => {this.getLocation()}} 
+              onPress={() => this.getLocation()} 
             />
           </View>
           <View style={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
