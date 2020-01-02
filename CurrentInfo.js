@@ -11,7 +11,7 @@ export default class CurrentInfo extends Component {
         <View style={styles.container}>
           <Text h2>{this.props.city}</Text>
           <PcN fill="tomato" width={200} height={200} />
-          <Text h2>{this.props.tempeture}</Text>
+          <Text h2>{this.props.tempeture} C</Text>
         </View>
       );
     } else if (this.props.icon === 'weather-partly-cloudy') {
@@ -19,7 +19,7 @@ export default class CurrentInfo extends Component {
         <View style={styles.container}>
           <Text h2>{this.props.city}</Text>
           <PcD fill="tomato" width={200} height={200} />
-          <Text h2>{this.props.tempeture}</Text>
+          <Text h2>{this.props.tempeture} C</Text>
         </View>
       );
     }
@@ -32,7 +32,7 @@ export default class CurrentInfo extends Component {
           color='tomato'
           size={200}
         />
-        <Text h2>{this.props.tempeture}</Text>
+        <Text h2>{this.props.tempeture} C</Text>
       </View>
     );
   }

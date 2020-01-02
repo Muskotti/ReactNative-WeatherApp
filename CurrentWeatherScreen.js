@@ -17,7 +17,7 @@ export default class CurrentWeatherScreen extends Component {
   }
 
   async componentDidMount(){
-    if(await data.compareTime() || await data.cheackKey('current')) {
+    if(await data.compareTime('current') || await data.cheackKey('current')) {
       await data.getLocation();
       await data.getCurrentWeather().then(()=> {
         this.setCurrentWeather()

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Text, Icon, ListItem} from 'react-native-elements';
 import PcD from './assets/weather-partly-cloudy.svg';
 import PcN from "./assets/weather-night-partly-cloudy.svg";
@@ -8,8 +8,12 @@ export default class PredictionItem extends Component {
 
   beatifyDate() {
     var options = { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'};
-    var result = new Date(this.props.date)
-    return result.toLocaleDateString("en-US", options)
+    var date = new Date(this.props.date)
+    var result = date.toLocaleDateString("en-US", options)
+    if(result == "invalid date") {
+      return this.props.date
+    }
+    return result
   }
 
   render() {

@@ -14,7 +14,8 @@ export default class PredictionScreen extends Component {
   };
 
   async componentDidMount(){
-    if(await data.compareTime() || await data.cheackKey('forecast')) {
+    if(await data.compareTime('forecast') || await data.cheackKey('forecast')) {
+      console.log("hakee uus True")
       await data.getLocation();
       await data.getForecast().then(()=> {
         this.setState({
@@ -23,6 +24,7 @@ export default class PredictionScreen extends Component {
         })
       });
     } else {
+      console.log("hakee muisti")
       await data.getStorageForecast().then(()=> {
         this.setState({
           isLoading: false,

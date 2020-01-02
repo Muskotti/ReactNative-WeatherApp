@@ -61,20 +61,38 @@ export default class fetchData {
     }
   }
 
+  async clearStorage() {
+    AsyncStorage.clear();
+  }
+
+  async printKeys() {
+    console.log(await AsyncStorage.getAllKeys())
+  }
+
   async cheackKey(key) {
     if(await AsyncStorage.getItem(key)) {
+      console.log("cheackKey false")
       return false
     }
+    console.log("cheackKey True")
     return true
   }
 
-  async compareTime() {
-    let oldTime = new Date( await AsyncStorage.getItem('Time'))
+  async compareTime(func) {
+    let oldTime = null
+    if(func === 'current') {
+      oldTime = new Date( await AsyncStorage.getItem('TimeCurrent'))
+    } else {
+      oldTime = new Date( await AsyncStorage.getItem('TimeForecast'))
+    }
     let newTime = new Date()
     oldTime.setMinutes( oldTime.getMinutes() + 5 );
+    this.printKeys()
     if(Date.parse(newTime) > Date.parse(oldTime)) {
+      console.log("aika True")
       return true
     }
+    console.log("aika false")
     return false
   }
 
@@ -101,7 +119,7 @@ export default class fetchData {
     let location = await Location.getCurrentPositionAsync({});
     this.location.latitude = location.coords.latitude;
     this.location.longitude = location.coords.longitude;
-    await AsyncStorage.multiSet([['Lat', '' + location.coords.latitude], ['Lon', '' + location.coords.longitude], ['Time', '' + new Date()]], (error) => {
+    await AsyncStorage.multiSet([['Lat', '' + location.coords.latitude], ['Lon', '' + location.coords.longitude]], (error) => {
       if(error) {
         console.log(error)
       }
@@ -111,6 +129,11 @@ export default class fetchData {
   async saveData(func,data) {
     try {
       await AsyncStorage.setItem(func, JSON.stringify(data))
+      if(func === 'current') {
+        await AsyncStorage.setItem('TimeCurrent', '' + new Date())
+      } else {
+        await AsyncStorage.setItem('TimeForecast', '' + new Date())
+      }
     } catch (error) {
       console.log(error)
     }
@@ -123,7 +146,7 @@ export default class fetchData {
       .then((data) => {
         this.currentWeather.city = data.name
         this.currentWeather.isLoading = false
-        this.currentWeather.tempeture = data.main.temp + " C"
+        this.currentWeather.tempeture = data.main.temp
         this.currentWeather.icon = this.getIcon(data.weather[0].icon)
         this.saveData('current',data)
       });
