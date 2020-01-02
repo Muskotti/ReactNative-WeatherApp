@@ -49,6 +49,12 @@ export default class CurrentWeatherScreen extends Component {
     }
   }
 
+  searchCity(city) {
+    data.fetchCity(city).then(()=> {
+      this.setCurrentWeather()
+    })
+  }
+
   render() {
     if (this.state.isLoading) {
       return(
@@ -62,7 +68,7 @@ export default class CurrentWeatherScreen extends Component {
     }
     return (
       <SafeAreaView style={styles.droidSafeArea}>
-          <SearchBarTop/>
+          <SearchBarTop searchCity={(data) => this.searchCity(data)}/>
           <View style={{flexDirection: 'row-reverse', position: 'absolute', right: 6, top: 96}}>
             <Icon
               reverse

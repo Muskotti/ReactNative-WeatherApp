@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Alert } from 'react-native';
 
 export default class fetchData {
 
@@ -71,10 +71,8 @@ export default class fetchData {
 
   async cheackKey(key) {
     if(await AsyncStorage.getItem(key)) {
-      console.log("cheackKey false")
       return false
     }
-    console.log("cheackKey True")
     return true
   }
 
@@ -89,10 +87,8 @@ export default class fetchData {
     oldTime.setMinutes( oldTime.getMinutes() + 5 );
     this.printKeys()
     if(Date.parse(newTime) > Date.parse(oldTime)) {
-      console.log("aika True")
       return true
     }
-    console.log("aika false")
     return false
   }
 
@@ -162,6 +158,25 @@ export default class fetchData {
       .then((data) => {
         this.forecast = data.list
         this.saveData('forecast', data.list)
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async fetchCity(city) {
+    try {
+      return fetch('https://api.openweathermap.org/data/2.5/weather?q='+ city + '&units=metric&APPID=63dba0881a9c7a2ab8dd3666fe61c42c&')
+      .then((responce) => responce.json())
+      .then((data) => {
+        if(data.cod === '404') {
+          Alert.alert('City not found')
+        } else {
+          this.currentWeather.city = data.name
+          this.currentWeather.isLoading = false
+          this.currentWeather.tempeture = data.main.temp
+          this.currentWeather.icon = this.getIcon(data.weather[0].icon)
+        }
       });
     } catch (error) {
       console.error(error);
