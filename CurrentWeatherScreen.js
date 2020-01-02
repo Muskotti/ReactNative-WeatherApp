@@ -3,11 +3,13 @@ import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator} from 'reac
 import SearchBarTop from './SearchBarTop.js';
 import CurrentInfo from './CurrentInfo.js';
 import { Icon } from 'react-native-elements';
-import fetchData from "./fetchData.js"
-
-const data = new fetchData();
 
 export default class CurrentWeatherScreen extends Component {
+
+  constructor(props) {
+    super(props)
+    this.data = props.screenProps.data
+  }
 
   state = {
     isLoading: true,
@@ -17,13 +19,13 @@ export default class CurrentWeatherScreen extends Component {
   }
 
   async componentDidMount(){
-    if(await data.compareTime('current') || await data.cheackKey('current')) {
-      await data.getLocation();
-      await data.getCurrentWeather().then(()=> {
+    if(await this.data.compareTime('current') || await this.data.cheackKey('current')) {
+      await this.data.getLocation();
+      await this.data.getCurrentWeather().then(()=> {
         this.setCurrentWeather()
       });
     } else {
-      data.getStorageCurrent().then(()=> {
+      this.data.getStorageCurrent().then(()=> {
         this.setCurrentWeather()
       })
     }
@@ -31,26 +33,26 @@ export default class CurrentWeatherScreen extends Component {
 
   setCurrentWeather() {
     this.setState({
-      isLoading: data.currentWeather.isLoading,
-      city: data.currentWeather.city,
-      tempeture: data.currentWeather.tempeture,
-      icon: data.currentWeather.icon
+      isLoading: this.data.currentWeather.isLoading,
+      city: this.data.currentWeather.city,
+      tempeture: this.data.currentWeather.tempeture,
+      icon: this.data.currentWeather.icon
     })
   }
 
   async getLocation(){
-    if(await data.compareTime()) {
+    if(await this.data.compareTime()) {
       this.setState({
         isLoading: true,
       })
-      data.getLocation().then(()=> {
+      this.data.getLocation().then(()=> {
         this.setCurrentWeather()
       });
     }
   }
 
   searchCity(city) {
-    data.fetchCity(city).then(()=> {
+    this.data.fetchCity(city).then(()=> {
       this.setCurrentWeather()
     })
   }

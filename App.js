@@ -5,6 +5,7 @@ import {createAppContainer} from 'react-navigation';
 import {createBottomTabNavigator } from 'react-navigation-tabs';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { Component } from 'react';
+import fetchData from "./fetchData.js"
 
 const MainNavigator = createBottomTabNavigator (
   {
@@ -43,6 +44,16 @@ const MainNavigator = createBottomTabNavigator (
   }
 );
 
-const App = createAppContainer(MainNavigator);
+const AppContainer = createAppContainer(MainNavigator);
 
-export default App;
+export default class App extends Component {
+
+  constructor(props) {
+    super(props)
+    this.data = new fetchData();
+  }
+
+  render() {
+    return <AppContainer screenProps={{data: this.data}}/>
+  }
+};

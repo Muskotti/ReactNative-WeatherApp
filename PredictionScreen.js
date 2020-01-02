@@ -1,37 +1,53 @@
 import React, { Component } from 'react';
 import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import fetchData from "./fetchData.js"
 import PredictionItem from "./PredictionItem.js";
 
-const data = new fetchData();
 
 export default class PredictionScreen extends Component {
+
+  constructor(props) {
+    super(props)
+    this.data = props.screenProps.data
+  }
 
   state = {
     isLoading: true,
     list: null,
   };
 
-  async componentDidMount(){
-    if(await data.compareTime('forecast') || await data.cheackKey('forecast')) {
-      console.log("hakee uus True")
-      await data.getLocation();
-      await data.getForecast().then(()=> {
+  async componentDidFocus(load) {
+    this.setState({
+      isLoading: true
+    })
+    if(await this.data.compareTime('forecast') || await this.data.cheackKey('forecast') || this.data.newCity) {
+      await this.data.getLocation();
+      await this.data.getForecast().then(()=> {
         this.setState({
           isLoading: false,
-          list: data.forecast
+          list: this.data.forecast
+        }, () => {
+          this.data.newCity = false
         })
       });
     } else {
-      console.log("hakee muisti")
-      await data.getStorageForecast().then(()=> {
+      await this.data.getStorageForecast().then(()=> {
         this.setState({
           isLoading: false,
-          list: data.forecast
+          list: this.data.forecast
         })
       })
     }
+  }
+
+  async componentDidMount(){
+    this.subs = [
+      this.props.navigation.addListener('didFocus', (payload) => this.componentDidFocus(payload)),
+    ];
+  }
+
+  componentWillUnmount() {
+    this.subs.forEach(sub => sub.remove());
   }
 
   render() {
@@ -52,7 +68,7 @@ export default class PredictionScreen extends Component {
                                       date={item.dt_txt} 
                                       temp={item.main.temp} 
                                       descr={item.weather[0].description} 
-                                      icon={data.getIcon(item.weather[0].icon)} 
+                                      icon={this.data.getIcon(item.weather[0].icon)} 
                                       humid={item.main.humidity}
                                       />}
             keyExtractor={(item, index) => 'key'+index}

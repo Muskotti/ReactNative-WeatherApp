@@ -16,6 +16,7 @@ export default class fetchData {
       icon: null,
     }
     this.forecast = null
+    this.newCity = false
   }
 
   getIcon(iconID) {
@@ -61,14 +62,6 @@ export default class fetchData {
     }
   }
 
-  async clearStorage() {
-    AsyncStorage.clear();
-  }
-
-  async printKeys() {
-    console.log(await AsyncStorage.getAllKeys())
-  }
-
   async cheackKey(key) {
     if(await AsyncStorage.getItem(key)) {
       return false
@@ -85,7 +78,6 @@ export default class fetchData {
     }
     let newTime = new Date()
     oldTime.setMinutes( oldTime.getMinutes() + 5 );
-    this.printKeys()
     if(Date.parse(newTime) > Date.parse(oldTime)) {
       return true
     }
@@ -153,7 +145,7 @@ export default class fetchData {
 
   async getForecast() {
     try {
-      return await fetch('https://api.openweathermap.org/data/2.5/forecast?lat='+ this.location.latitude + '&lon=' + this.location.longitude + '&units=metric&APPID=63dba0881a9c7a2ab8dd3666fe61c42c&')
+      return await fetch('https://api.openweathermap.org/data/2.5/forecast?q='+ this.currentWeather.city + '&units=metric&APPID=63dba0881a9c7a2ab8dd3666fe61c42c&')
       .then((responce) => responce.json())
       .then((data) => {
         this.forecast = data.list
@@ -172,6 +164,7 @@ export default class fetchData {
         if(data.cod === '404') {
           Alert.alert('City not found')
         } else {
+          this.newCity = true
           this.currentWeather.city = data.name
           this.currentWeather.isLoading = false
           this.currentWeather.tempeture = data.main.temp
