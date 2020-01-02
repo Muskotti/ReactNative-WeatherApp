@@ -41,14 +41,13 @@ export default class CurrentWeatherScreen extends Component {
   }
 
   async getLocation(){
-    if(await this.data.compareTime()) {
-      this.setState({
-        isLoading: true,
-      })
-      this.data.getLocation().then(()=> {
-        this.setCurrentWeather()
-      });
-    }
+    this.setState({
+      isLoading: true,
+    })
+    await this.data.getLocation();
+    await this.data.getCurrentWeather().then(()=> {
+      this.setCurrentWeather()
+    });
   }
 
   searchCity(city) {
