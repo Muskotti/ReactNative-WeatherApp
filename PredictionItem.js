@@ -21,8 +21,9 @@ export default class PredictionItem extends Component {
     if(this.props.icon === 'weather-night-partly-cloudy') {
       return (
         <ListItem
+          containerStyle= {this.props.bg}
           rightElement= {
-            <Text>{this.props.temp} C</Text>
+            <Text style={this.props.txt}>{this.props.temp} C</Text>
           }
           rightAvatar={
             <Text style={{color:'#039dfc'}}>{this.props.humid} %</Text>
@@ -31,16 +32,18 @@ export default class PredictionItem extends Component {
             <PcN fill="tomato" width={size} height={size} />
           }
           title={this.beatifyDate()}
+          titleStyle={this.props.txt}
           subtitle={this.props.descr}
-          subtitleStyle={{textTransform:'capitalize'}}
+          subtitleStyle={[this.props.txt, {textTransform:'capitalize'}]}
           bottomDivider
         />
       );
     } else if (this.props.icon === 'weather-partly-cloudy') {
       return (
         <ListItem
+          containerStyle= {this.props.bg}
           rightElement= {
-            <Text>{this.props.temp} C</Text>
+            <Text style={this.props.txt}>{this.props.temp} C</Text>
           }
           rightAvatar={
             <Text style={{color:'#039dfc'}}>{this.props.humid} %</Text>
@@ -49,16 +52,18 @@ export default class PredictionItem extends Component {
             <PcD fill="tomato" width={size} height={size} />
           }
           title={this.beatifyDate()}
+          titleStyle={this.props.txt}
           subtitle={this.props.descr}
-          subtitleStyle={{textTransform:'capitalize'}}
+          subtitleStyle={[this.props.txt, {textTransform:'capitalize'}]}
           bottomDivider
         />
       );
     }
     return(
       <ListItem
+        containerStyle= {this.props.bg}
         rightElement= {
-          <Text>{this.props.temp} C</Text>
+          <Text style={this.props.txt}>{this.props.temp} C</Text>
         }
         rightAvatar={
           <Text style={{color:'#039dfc'}}>{this.props.humid} %</Text>
@@ -72,22 +77,11 @@ export default class PredictionItem extends Component {
           />
         }
         title={this.beatifyDate()}
+        titleStyle={this.props.txt}
         subtitle={this.props.descr}
-        subtitleStyle={{textTransform:'capitalize'}}
+        subtitleStyle={[this.props.txt, {textTransform:'capitalize'}]}
         bottomDivider
       />
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  item: {
-    flexDirection: 'row',
-    justifyContent: "center",
-    alignItems: "center"
-  }
-});

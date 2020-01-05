@@ -1,5 +1,6 @@
 import CurrentWeatherScreen from './CurrentWeatherScreen.js';
 import PredictionScreen from './PredictionScreen.js';
+import settingsScreen from './settingsScreen.js'
 
 import {createAppContainer} from 'react-navigation';
 import {createBottomTabNavigator } from 'react-navigation-tabs';
@@ -21,6 +22,12 @@ const MainNavigator = createBottomTabNavigator (
         title: 'Forecast',
       }
     },
+    settingsScreen: {
+      screen: settingsScreen,
+      navigationOptions: {
+        title: 'Settings',
+      }
+    }
   },
   {
     initialRouteName: "CurrentWeatherScreen",
@@ -30,9 +37,11 @@ const MainNavigator = createBottomTabNavigator (
         let IconComponent = Ionicons;
         let iconName;
         if (routeName === 'CurrentWeatherScreen') {
-          iconName = `weather-cloudy`;
+          iconName = 'weather-cloudy';
         } else if (routeName === 'PredictionScreen') {
-          iconName = `alarm`;
+          iconName = 'alarm';
+        } else if(routeName === 'settingsScreen') {
+          iconName = 'settings'
         }
         return <IconComponent name={iconName} size={25} color={tintColor}/>;
       },
@@ -40,6 +49,9 @@ const MainNavigator = createBottomTabNavigator (
     tabBarOptions: {
       activeTintColor: 'tomato',
       inactiveTintColor: 'gray',
+      style: {
+        backgroundColor: '#393E42'
+      }
     },
   }
 );
@@ -51,9 +63,18 @@ export default class App extends Component {
   constructor(props) {
     super(props)
     this.data = new fetchData();
+    this.state = {
+      value: false
+    }
+  }
+
+  theme = (value) => {
+    this.setState({
+      value: value
+    })
   }
 
   render() {
-    return <AppContainer screenProps={{data: this.data}}/>
+    return <AppContainer screenProps={{data: this.data, changeTheme: this.theme, value: this.state.value}}/>
   }
 };

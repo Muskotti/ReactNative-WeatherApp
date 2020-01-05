@@ -51,10 +51,14 @@ export default class PredictionScreen extends Component {
   }
 
   render() {
+    const color = this.props.screenProps.value ? styles.dark : styles.light
+    const bg = this.props.screenProps.value ? styles.darkbg : styles.lightbg
+    const txt = this.props.screenProps.value ? styles.darktxt : styles.lighttxt
+
     if (this.state.isLoading) {
       return(
         <SafeAreaView  style={styles.droidSafeArea}>
-          <View style={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
+          <View style={[styles.fixed, color]}>
             <ActivityIndicator size="large" color="tomato" />
           </View>
       </SafeAreaView >
@@ -70,6 +74,8 @@ export default class PredictionScreen extends Component {
                                       descr={item.weather[0].description} 
                                       icon={this.data.getIcon(item.weather[0].icon)} 
                                       humid={item.main.humidity}
+                                      bg={bg}
+                                      txt={txt}
                                       />}
             keyExtractor={(item, index) => 'key'+index}
           />
@@ -82,5 +88,29 @@ const styles = StyleSheet.create({
   droidSafeArea: {
     flex: 1,
     paddingTop: Platform.OS === 'android' ? 30 : 0
+  },
+  fixed: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  dark: {
+    backgroundColor: '#393E42',
+    color: '#86939E'
+  },
+  light: {
+    backgroundColor: 'white'
+  },
+  darkbg: {
+    backgroundColor: '#393E42',
+  },
+  lightbg: {
+    backgroundColor: 'white'
+  },
+  darktxt: {
+    color: '#86939E'
+  },
+  lighttxt: {
+    color: 'black'
   }
 });

@@ -57,10 +57,12 @@ export default class CurrentWeatherScreen extends Component {
   }
 
   render() {
+    const color = this.props.screenProps.value ? styles.dark : styles.light
+
     if (this.state.isLoading) {
       return(
         <SafeAreaView  style={styles.droidSafeArea}>
-          <SearchBarTop/>
+          <SearchBarTop value={this.props.screenProps.value}/>
           <View style={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
             <ActivityIndicator size="large" color="tomato" />
           </View>
@@ -69,7 +71,7 @@ export default class CurrentWeatherScreen extends Component {
     }
     return (
       <SafeAreaView style={styles.droidSafeArea}>
-          <SearchBarTop searchCity={(data) => this.searchCity(data)}/>
+          <SearchBarTop searchCity={(data) => this.searchCity(data)} value={this.props.screenProps.value}/>
           <View style={{flexDirection: 'row-reverse', position: 'absolute', right: 6, top: 96}}>
             <Icon
               reverse
@@ -80,8 +82,8 @@ export default class CurrentWeatherScreen extends Component {
               onPress={() => this.getLocation()} 
             />
           </View>
-          <View style={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
-            <CurrentInfo city={this.state.city} tempeture={this.state.tempeture} icon={this.state.icon}/>
+          <View style={[styles.fixed, color]}>
+            <CurrentInfo city={this.state.city} tempeture={this.state.tempeture} icon={this.state.icon} color={color}/>
           </View>
       </SafeAreaView >
     );
@@ -95,4 +97,16 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingTop: Platform.OS === 'android' ? 34 : 0
   },
+  fixed: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  dark: {
+    backgroundColor: '#393E42',
+    color: '#86939E'
+  },
+  light: {
+    backgroundColor: 'white'
+  }
 });

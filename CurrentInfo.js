@@ -9,30 +9,30 @@ export default class CurrentInfo extends Component {
     if(this.props.icon === 'weather-night-partly-cloudy') {
       return (
         <View style={styles.container}>
-          <Text h2>{this.props.city}</Text>
+          <Text h2 style={this.props.color}>{this.props.city}</Text>
           <PcN fill="tomato" width={200} height={200} />
-          <Text h2>{this.props.tempeture} C</Text>
+          <Text h2 style={this.props.color}>{this.props.tempeture} C</Text>
         </View>
       );
     } else if (this.props.icon === 'weather-partly-cloudy') {
       return (
         <View style={styles.container}>
-          <Text h2>{this.props.city}</Text>
+          <Text h2 style={this.props.color}>{this.props.city}</Text>
           <PcD fill="tomato" width={200} height={200} />
-          <Text h2>{this.props.tempeture} C</Text>
+          <Text h2 style={this.props.color}>{this.props.tempeture} C</Text>
         </View>
       );
     }
     return (
       <View style={styles.container}>
-        <Text h2>{this.props.city}</Text>
+        <Text h2 style={this.props.color}>{this.props.city}</Text>
         <Icon
           name={this.props.icon}
           type='material-community'
           color='tomato'
           size={200}
         />
-        <Text h2>{this.props.tempeture} C</Text>
+        <Text h2 style={this.props.color}>{this.props.tempeture} C</Text>
       </View>
     );
   }

@@ -19,7 +19,7 @@ export default class SearchBarTop extends Component {
         placeholder="City"
         onChangeText={this.updateSearch}
         value={search}
-        lightTheme={true}
+        lightTheme={!this.props.value}
         onSubmitEditing={() => this.props.searchCity(this.state.search)}
       />
     );
