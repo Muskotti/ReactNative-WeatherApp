@@ -63,7 +63,7 @@ export default class CurrentWeatherScreen extends Component {
       return(
         <SafeAreaView  style={styles.droidSafeArea}>
           <SearchBarTop value={this.props.screenProps.value}/>
-          <View style={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
+          <View style={[styles.fixed, color]}>
             <ActivityIndicator size="large" color="tomato" />
           </View>
       </SafeAreaView >

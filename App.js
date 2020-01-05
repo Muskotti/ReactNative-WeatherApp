@@ -68,9 +68,18 @@ export default class App extends Component {
     }
   }
 
+  async componentDidMount(){
+    var result = await this.data.getTheme()
+    this.setState({
+      value: result
+    })
+  }
+
   theme = (value) => {
     this.setState({
       value: value
+    }, () => {
+      this.data.changeTheme(value)
     })
   }
 

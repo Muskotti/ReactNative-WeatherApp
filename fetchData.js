@@ -69,6 +69,26 @@ export default class fetchData {
     return true
   }
 
+  async getTheme() {
+    var value = await AsyncStorage.getItem('Theme');
+    if(value === 'true') {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  async changeTheme(value) {
+    try {
+      await AsyncStorage.setItem('Theme', '' + value)
+    } catch(error) {
+      console.log(error)
+    }
+    const keys = await AsyncStorage.getAllKeys();
+    const result = await AsyncStorage.multiGet(keys);
+    console.log(result)
+  }
+
   async compareTime(func) {
     let oldTime = null
     if(func === 'current') {
