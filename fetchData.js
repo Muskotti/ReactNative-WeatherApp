@@ -84,9 +84,6 @@ export default class fetchData {
     } catch(error) {
       console.log(error)
     }
-    const keys = await AsyncStorage.getAllKeys();
-    const result = await AsyncStorage.multiGet(keys);
-    console.log(result)
   }
 
   async compareTime(func) {

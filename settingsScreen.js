@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Platform, SafeAreaView, Text, View, Switch } from 'react-native';
+import { StyleSheet, Platform, SafeAreaView, View, Switch } from 'react-native';
+import { Text } from 'react-native-elements';
 
 export default class settingsScreen extends Component {
 
@@ -9,12 +10,13 @@ export default class settingsScreen extends Component {
 
   render() {
     const color = this.props.screenProps.value ? styles.dark : styles.light
+    const text = this.props.screenProps.value ? 'Light theme' : 'Dark theme'
 
     return (
       <SafeAreaView style={styles.droidSafeArea}>
         <View style={[styles.fixed, color]}>
-          <Text>
-            dasdasdsadasdadsadasdsadasdasdasdsadasdasd
+          <Text h3 style={color}>
+            {text}
           </Text>
           <Switch onValueChange={this.props.screenProps.changeTheme} value={this.props.screenProps.value}/>
         </View>
@@ -36,7 +38,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   dark: {
-    backgroundColor: '#393E42'
+    backgroundColor: '#393E42',
+    color: '#86939E'
   },
   light: {
     backgroundColor: 'white'
