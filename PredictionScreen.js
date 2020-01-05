@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator} from 'react-native';
+import { StyleSheet, SafeAreaView, Platform, View, ActivityIndicator, Button} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import PredictionItem from "./PredictionItem.js";
-
+import MoistureScreen from './MoistureScreen.js';
 
 export default class PredictionScreen extends Component {
 
@@ -14,11 +14,13 @@ export default class PredictionScreen extends Component {
   state = {
     isLoading: true,
     list: null,
+    moisture: false,
   };
 
   async componentDidFocus(load) {
     this.setState({
-      isLoading: true
+      isLoading: true,
+      moisture: false,
     })
     if(await this.data.compareTime('forecast') || await this.data.cheackKey('forecast') || this.data.newCity) {
       await this.data.getLocation();
@@ -64,6 +66,16 @@ export default class PredictionScreen extends Component {
       </SafeAreaView >
       )
     }
+
+    if(this.state.moisture) {
+      return(
+        <SafeAreaView  style={styles.droidSafeArea}>
+          <MoistureScreen data={this.data} value={this.props.screenProps.value}/>
+          <Button color='tomato' title='Moisture chart' onPress={() => this.setState({moisture: false})}/>
+        </SafeAreaView >
+      )
+    }
+
     return (
       <SafeAreaView  style={styles.droidSafeArea}>
           <FlatList
@@ -79,6 +91,7 @@ export default class PredictionScreen extends Component {
                                       />}
             keyExtractor={(item, index) => 'key'+index}
           />
+          <Button color='tomato' title='Moisture chart' onPress={() => this.setState({moisture: true})}/>
       </SafeAreaView >
     );
   }
