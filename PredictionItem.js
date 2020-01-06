@@ -8,9 +8,9 @@ export default class PredictionItem extends Component {
 
   beatifyDate() {
     var options = { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'};
-    var date = new Date(this.props.date)
+    var date = new Date(this.props.date.replace(' ', 'T'))
     var result = date.toLocaleDateString("en-US", options)
-    if(result == "invalid date") {
+    if(result == "Invalid date") {
       return this.props.date
     }
     return result

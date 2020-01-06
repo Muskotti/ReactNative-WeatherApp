@@ -20,7 +20,7 @@ export default class MoistureScreen extends Component {
   }
 
   getTime = (item) => {
-    var date = new Date(item)
+    var date = new Date(item.replace(' ', 'T'))
     if(date.getHours()) {
       return date.getHours() + ':00'
     } else {
