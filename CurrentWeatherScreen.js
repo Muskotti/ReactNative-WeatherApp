@@ -72,18 +72,18 @@ export default class CurrentWeatherScreen extends Component {
     return (
       <SafeAreaView style={styles.droidSafeArea}>
           <SearchBarTop searchCity={(data) => this.searchCity(data)} value={this.props.screenProps.value}/>
-          <View style={{flexDirection: 'row-reverse', position: 'absolute', right: 6, top: 96}}>
+          <View style={[styles.fixed, color]}>
+            <CurrentInfo city={this.state.city} tempeture={this.state.tempeture} icon={this.state.icon} color={color}/>
+          </View>
+          <View style={[color, {flexDirection: "row-reverse"}]}>
             <Icon
               reverse
               raised
               name='crosshairs-gps'
               type='material-community'
               color='tomato'
-              onPress={() => this.getLocation()} 
+              onPress={() => this.getLocation()}
             />
-          </View>
-          <View style={[styles.fixed, color]}>
-            <CurrentInfo city={this.state.city} tempeture={this.state.tempeture} icon={this.state.icon} color={color}/>
           </View>
       </SafeAreaView >
     );

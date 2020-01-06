@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Platform, SafeAreaView, View, Text } from 'react-native';
 import {LineChart} from "react-native-chart-kit";
 import { Dimensions } from "react-native";
+import moment from "moment";
 
 export default class MoistureScreen extends Component {
 
@@ -20,12 +21,8 @@ export default class MoistureScreen extends Component {
   }
 
   getTime = (item) => {
-    var date = new Date(item.replace(' ', 'T'))
-    if(date.getHours()) {
-      return date.getHours() + ':00'
-    } else {
-      return '00:00'
-    }
+    var time = moment(item).format('HH:mm')
+    return time
   }
 
   render() {

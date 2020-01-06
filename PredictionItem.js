@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
 import { Text, Icon, ListItem} from 'react-native-elements';
 import PcD from './assets/weather-partly-cloudy.svg';
 import PcN from "./assets/weather-night-partly-cloudy.svg";
+import moment from "moment";
 
 export default class PredictionItem extends Component {
 
   beatifyDate() {
-    var options = { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'};
-    var date = new Date(this.props.date.replace(' ', 'T'))
-    var result = date.toLocaleDateString("en-US", options)
-    if(result == "Invalid date") {
+    var date = moment(this.props.date).format('llll')
+    if(date == "Invalid date") {
       return this.props.date
     }
-    return result
+    return date
   }
 
   render() {
